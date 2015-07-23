@@ -1,1 +1,8 @@
 
+type: CNAME
+
+host: www.hodovanyuk.com
+
+answer: mendow.github.io
+
+TTL: 300
