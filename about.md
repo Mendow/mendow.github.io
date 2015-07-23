@@ -2,14 +2,18 @@
 layout: page
 title: About
 permalink: /about/
+published: true
 ---
 
-Some information about you!
 
-### More Information
+Hello
 
-A place to include any other types of information that you'd like to include about yourself.
+I am web developer. Work with Javascript/HTML5
+
+I am honest handworker and love to do programming. I can work overtime to meet timelines and always answering all e-mails and skype messages.
+
+I like to do small and big projects and have good communication skills.
 
 ### Contact me
 
-[email@domain.com](mailto:email@domain.com)
+[hodovanyu.mi@gmail.com](mailto:hodovanyu.mi@gmail.com)
