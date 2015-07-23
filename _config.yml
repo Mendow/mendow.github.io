@@ -18,15 +18,15 @@ avatar: https://avatars.githubusercontent.com/u/7933063?v=3
 # Includes an icon in the footer for each username you enter
 footer-links:
   dribbble:
-  email:
+  email: hodovanyuk.mi@gmail.com	
   facebook:
   flickr:
-  github: barryclark/jekyll-now
-  instagram:
-  linkedin:
+  github: https://github.com/Mendow
+  instagram:https://instagram.com/eulerass/
+  linkedin:https://www.linkedin.com/profile/view?id=432876289&trk
   pinterest:
   rss: # just type anything here for a working RSS icon, make sure you set the "url" above!
-  twitter: jekyllrb
+  twitter: https://twitter.com/hodovanyuk
   stackoverflow: # your stackoverflow profile, e.g. "users/50476/bart-kiers"
   youtube: # channel/<your_long_string> or user/<user-name>
   googleplus: # anything in your profile username that comes after plus.google.com/
@@ -34,10 +34,10 @@ footer-links:
 
 # Enter your Disqus shortname (not your username) to enable commenting on posts
 # You can find your shortname on the Settings page of your Disqus account
-disqus:
+disqus:Matvey
 
 # Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
-google_analytics:
+google_analytics:UA-65548439-1
 
 # Your website URL (e.g. http://barryclark.github.io or http://www.barryclark.co)
 # Used for Sitemap.xml and your RSS feed
