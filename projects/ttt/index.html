@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tic Tac Toe</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js" type="text/javascript"></script>
+    <!-- Firebase -->
+    <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <!-- AngularFire -->
+    <script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
+
+    <script src="controller.js" type="text/javascript"></script>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="bootstrap.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body ng-app="myApp">
+    <!-- here the app is -->
+    <div ng-controller="MyCtrl">
+        <div class="board">
+            <div ng-repeat="row in data">
+                <div ng-repeat="col in row ">
+                    <div ng-class="{'square':col.id==0,'squareRed':col.id==1,'squareBlue':col.id==2}" ng-click="move($index,$parent.$index)">
+                        <div class="content">
+                            <div class="table">
+                                <div class="table-cell">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
