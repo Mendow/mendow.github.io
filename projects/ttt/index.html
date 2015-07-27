@@ -17,6 +17,7 @@
 <body ng-app="myApp">
     <!-- here the app is -->
     <div ng-controller="MyCtrl">
+        <button ng-click="resetBoard()">>RESET BOARD</button>
         <div class="board">
             <div ng-repeat="row in data">
                 <div ng-repeat="col in row ">

@@ -9,37 +9,26 @@ myApp.controller("MyCtrl", ["$scope", '$firebaseObject', '$firebaseArray', '$fir
 
 
         // download the data into a local object
-        $scope.d = $firebaseArray(ref);
+        $scope.data = $firebaseArray(ref);
 
 
         // synchronize the object with a three-way data binding
         // click on `index.html` above to see it used in the DOM!
 
-
-
-        $scope.data = [
-            [{
-                id: 0
-    }, {
-                id: 0
-    }, {
-                id: 0
-    }],
-            [{
-                id: 0
-    }, {
-                id: 0
-    }, {
-                id: 0
-    }],
-            [{
-                id: 0
-    }, {
-                id: 0
-    }, {
-                id: 0
-    }]
-           ];
+        // when data is loaded check validity of the route
+        $scope.data.$loaded().then(function () {
+            //it is need to load pag after it loaded
+            console.log($scope.data[0][0].id);
+        })
+        $scope.resetBoard = function () {
+            for (var i = 0; i < 3; i++) {
+                for (var j = 0; j < 3; j++) {
+                    ref.child(i.toString()).child(j.toString()).update({
+                        id: 0
+                    });
+                }
+            }
+        }
 
         $scope.step = 0;
 
@@ -61,13 +50,14 @@ myApp.controller("MyCtrl", ["$scope", '$firebaseObject', '$firebaseArray', '$fir
                     $scope.step += 1;
                 }
             }
-
-            console.log("__");
-            console.log($scope.data[col][row].id);
-            console.log("__");
             ref.child(row.toString()).child(col.toString()).update({
                 id: $scope.data[row][col].id
             });
+            console.log("__");
+            console.log("data " + $scope.data[row][col].id);
+            console.log("__");
+            
+
 
             if ($scope.step > 4) {
                 $scope.checkWinner(col, row);
@@ -77,7 +67,7 @@ myApp.controller("MyCtrl", ["$scope", '$firebaseObject', '$firebaseArray', '$fir
 
         $scope.checkWinner = function (col, row) {
             /*how? stoping if in first loop winner finded */
-            console.log($scope.data[col][row].id);
+
             for (var i = 0; i < 3; i++) {
                 if ($scope.data[i][0].id == $scope.data[i][1].id && $scope.data[i][1].id == $scope.data[i][2].id && $scope.data[i][1].id != 0) {
                     $scope.winner($scope.data[i][1].id);
@@ -85,28 +75,21 @@ myApp.controller("MyCtrl", ["$scope", '$firebaseObject', '$firebaseArray', '$fir
                     console.log($scope.data[i][1].id);
                     console.log($scope.data[i][2].id);
                     console.log($scope.data[i][0].id == $scope.data[i][1].id);
-                    console.log('loop1');
                 }
             }
 
             for (var i = 0; i < 3; i++) {
                 if ($scope.data[0][i].id == $scope.data[1][i].id && $scope.data[1][i].id == $scope.data[2][i].id && $scope.data[0][i].id != 0) {
                     $scope.winner($scope.data[1][i].id);
-                    console.log('loop2');
                 }
             }
 
             if ($scope.data[0][0].id == $scope.data[1][1].id && $scope.data[1][1].id == $scope.data[2][2].id && $scope.data[0][0].id != 0 && $scope.data[1][1].id != 0 && $scope.data[2][2].id != 0) {
                 $scope.winner($scope.data[1][1].id);
-                console.log('loop3');
             }
 
             if ($scope.data[0][2].id == $scope.data[1][1].id && $scope.data[1][1].id == $scope.data[2][0].id && $scope.data[0][2].id != 0 && $scope.data[1][1].id != 0 && $scope.data[2][0].id != 0) {
                 $scope.winner($scope.data[1][1].id);
-                console.log('loop4');
-                console.log('0:2 ' + $scope.data[0][2].id);
-                console.log('2:2 ' + $scope.data[2][2].id);
-                console.log('1:1 ' + $scope.data[1][2].id);
             }
 
         }
