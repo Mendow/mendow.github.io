@@ -123,7 +123,7 @@
       temp.vertices.forEach(function(p) {
         // check if we need to reset
         r = particle.length(p);
-        if (r > 0.5) {
+        if (true) {
           mult = G * (p.mass * particle.mass) / Math.pow(r, 3);
 
           particle.acc.x = mult * particle.x;
