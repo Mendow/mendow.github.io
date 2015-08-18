@@ -27,14 +27,6 @@
     var dt = 0.0001;
     var count = 50;
     var cam = 30;
-
-    var cntr = new THREE.Vector3();
-    cntr.x = 0;
-    cntr.y = 0;
-    cntr.z = 0;
-    cntr.mass = -1;
-    cntr.acc = 0;
-    cntr.vel = 0;
   }
 
   function init() {
@@ -119,12 +111,16 @@
       mult;
     var geometry = ps.geometry;
     var temp = ps.geometry;
-    geometry.vertices.forEach(function(particle) {
-      temp.vertices.forEach(function(p) {
-        // check if we need to reset
-        r = particle.length(p);
-        if (true) {
-          mult = G * (p.mass * particle.mass) / Math.pow(r, 3);
+    for (var i = 0; i < geometry.vertices.length; i++) {
+
+      for (var j = 0; j < geometry.vertices.length; j++) {
+        if (i != j) {
+          var particle = geometry.vertices[i];
+          var cntr = geometry.vertices[j];
+
+          r = particle.length(cntr);
+
+          mult = G * (cntr.mass * particle.mass) / Math.pow(r, 3);
 
           particle.acc.x = mult * particle.x;
           particle.vel.x += particle.acc.x * dt;
@@ -138,9 +134,9 @@
           particle.vel.z += particle.acc.z * dt;
           particle.z += particle.vel.z * dt;
         }
+      }
+    }
 
-      });
-    });
     geometry.verticesNeedUpdate = true;
     geometry.colorsNeedUpdate = true;
 
