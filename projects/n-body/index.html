@@ -69,12 +69,13 @@
 
     for (var j = 0; j < y; j++) {
       var v = new THREE.Vector3();
-      v.x = intRand(10, -10);
-      v.y = intRand(10, -10);
-      v.z = intRand(10, -10);
+      var ran = 30;
+      v.x = intRand(ran, -ran);
+      v.y = intRand(ran, -ran);
+      v.z = intRand(ran, -ran);
       v.vel = new THREE.Vector3(intRand(1, -1), intRand(1, -1), intRand(1, -1));
       v.acc =new THREE.Vector3(intRand(1, -1), intRand(1, -1), intRand(1, -1));
-      v.mass = intRand(10, -10);
+      v.mass = intRand(5, 0);
       geometry.vertices.push(v);
     }
 
@@ -120,7 +121,7 @@
 
           r = particle.length(cntr);
 
-          mult = G * (cntr.mass * particle.mass) / Math.pow(r, 3);
+          mult = (-1) * G * (cntr.mass * particle.mass) / Math.pow(r, 3);
 
           particle.acc.x = mult * particle.x;
           particle.vel.x += particle.acc.x * dt;
