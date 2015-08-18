@@ -2,10 +2,10 @@
 <html>
 
 <head>
-  <title>n-body</title>
-  <script src="http://mendow.github.io/projects/n-body/libs/three.js"></script>
-  <script src="http://mendow.github.io/projects/n-body/libs/OrbitControls.js"></script>
-  <script src="http://mendow.github.io/projects/n-body/libs/OBJLoader.js"></script>
+  <title>06.01 - Create a particle system from an existing geometry</title>
+  <script src="/libs/three.js"></script>
+  <script src="/libs/OrbitControls.js"></script>
+  <script src="/libs/OBJLoader.js"></script>
   <style>
     body {
       margin: 0;
@@ -17,6 +17,7 @@
 <script>
   //define global variable
   {
+    var c = 0;
     var renderer;
     var scene;
     var camera;
@@ -24,17 +25,17 @@
     var ps;
 
     var G = 9.81;
-    var dt = 0.0001;
-    var count = 50;
+    var dt = 0.001;
+    var count = 100;
     var cam = 30;
 
-    var cntr = new THREE.Vector3();
-    cntr.x = 0;
-    cntr.y = 0;
-    cntr.z = 0;
-    cntr.mass = -1;
-    cntr.acc = 0;
-    cntr.vel = 0;
+    //    var cntr = new THREE.Vector3();
+    //    cntr.x = 0;
+    //    cntr.y = 0;
+    //    cntr.z = 0;
+    //    cntr.mass = -1;
+    //    cntr.acc = 0;
+    //    cntr.vel = 0;
   }
 
   function init() {
@@ -81,18 +82,18 @@
       v.y = intRand(10, -10);
       v.z = intRand(10, -10);
       v.vel = new THREE.Vector3(intRand(1, -1), intRand(1, -1), intRand(1, -1));
-      v.acc =new THREE.Vector3(intRand(1, -1), intRand(1, -1), intRand(1, -1));
-      v.mass = intRand(10, -10);
+      v.acc = new THREE.Vector3(intRand(1, -1), intRand(1, -1), intRand(1, -1));
+      v.mass = intRand(5, -5);
       geometry.vertices.push(v);
     }
 
     console.log(geometry.vertices);
     // use a material for some styling
     var psMat = new THREE.PointCloudMaterial();
-    psMat.map = THREE.ImageUtils.loadTexture("http://mendow.github.io/projects/n-body/assets/textures/ps_smoke.png");
+    psMat.map = THREE.ImageUtils.loadTexture("/assets/textures/ps_ball.png");
     psMat.color = new THREE.Color(0x55ff55);
     psMat.transparent = true;
-    psMat.size = 1;
+    psMat.size = 5;
     psMat.blending = THREE.AdditiveBlending;
 
     // Create a new particle system based on the provided geometry
@@ -103,6 +104,9 @@
     ps.position.y = 100 / cam;
     ps.position.x = 100 / cam;
     ps.position.z = 100 / cam;
+
+    var pst = ps;
+    scene.add(pst);
     // add the particle system to the scene
     scene.add(ps);
 
@@ -113,18 +117,24 @@
 
   function render() {
     renderer.render(scene, camera);
+
     requestAnimationFrame(render);
+
 
     var r,
       mult;
     var geometry = ps.geometry;
-    var temp = ps.geometry;
-    geometry.vertices.forEach(function(particle) {
-      temp.vertices.forEach(function(p) {
-        // check if we need to reset
-        r = particle.length(p);
-        if (true) {
-          mult = G * (p.mass * particle.mass) / Math.pow(r, 3);
+
+    for (var i = 0; i < geometry.vertices.length; i++) {
+
+      for (var j = 0; j < geometry.vertices.length; j++) {
+        if (i != j) {
+          var particle = geometry.vertices[i];
+          var cntr = geometry.vertices[j];
+
+          r = particle.length(cntr);
+
+          mult = G * (cntr.mass * particle.mass) / Math.pow(r, 3);
 
           particle.acc.x = mult * particle.x;
           particle.vel.x += particle.acc.x * dt;
@@ -137,10 +147,16 @@
           particle.acc.z = mult * particle.z;
           particle.vel.z += particle.acc.z * dt;
           particle.z += particle.vel.z * dt;
+
+
         }
 
-      });
-    });
+
+      }
+
+
+    }
+
     geometry.verticesNeedUpdate = true;
     geometry.colorsNeedUpdate = true;
 
