@@ -80,12 +80,12 @@
     }
 
     console.log(geometry.vertices);
-    // use a material for some styling
+   // use a material for some styling
     var psMat = new THREE.PointCloudMaterial();
-    psMat.map = THREE.ImageUtils.loadTexture("http://mendow.github.io/projects/n-body/assets/textures/ps_smoke.png");
+   
     psMat.color = new THREE.Color(0x55ff55);
     psMat.transparent = true;
-    psMat.size = 1;
+   psMat.size = 1;
     psMat.blending = THREE.AdditiveBlending;
 
     // Create a new particle system based on the provided geometry
