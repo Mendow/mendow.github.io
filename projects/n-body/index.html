@@ -15,8 +15,9 @@
   </style>
 </head>
 <script>
-  //define global variable
+   //define global variable
   {
+    var c = 0;
     var renderer;
     var scene;
     var camera;
@@ -24,12 +25,26 @@
     var ps;
 
     var G = 9.81;
-    var dt = 0.0001;
-    var count = 1000;
-    var cam = 30;
-  }
+    var dt = 0.001;
+    var count = 10;
 
+    var cam = 30;
+
+    var temp = new THREE.Vector3();
+    temp.x = 0;
+    temp.y = 0;
+    temp.z = 0;
+    temp.vel = new THREE.Vector3(0, 0, 0);
+    temp.acc = new THREE.Vector3(0, 0, 0);
+    temp.mass = 0;
+
+    var r;
+
+
+  }
+  //init environment
   function init() {
+    // scene
     {
       // create a scene, that will hold all our elements such as objects, cameras and lights.
       scene = new THREE.Scene();
@@ -52,7 +67,6 @@
     }
     setupParticleSystem(count);
 
-
     // add the output of the renderer to the html element
     document.body.appendChild(renderer.domElement);
 
@@ -60,83 +74,82 @@
     render();
   }
 
+  // particle system
   function setupParticleSystem(y) {
-
-
-
     var geometry = new THREE.Geometry();
-
-
     for (var j = 0; j < y; j++) {
       var v = new THREE.Vector3();
-      var ran = 30;
-      v.x = intRand(ran, -ran);
-      v.y = intRand(ran, -ran);
-      v.z = intRand(ran, -ran);
-      v.vel = new THREE.Vector3(intRand(1, -1), intRand(1, -1), intRand(1, -1));
-      v.acc =new THREE.Vector3(intRand(1, -1), intRand(1, -1), intRand(1, -1));
-      v.mass = intRand(5, 0);
+      var ran = count / 10;
+      var q = 0.000005;
+      v.x = Rand(ran, -ran);
+      v.y = Rand(ran, -ran);
+      v.z = Rand(ran, -ran);
+      v.vel = new THREE.Vector3(Rand(-ran, ran), Rand(-ran, ran), Rand(-ran, ran));
+      v.acc = new THREE.Vector3(0, 0, 0);
+      v.mass = Rand(0, q);
       geometry.vertices.push(v);
     }
 
-    console.log(geometry.vertices);
-   // use a material for some styling
-    var psMat = new THREE.PointCloudMaterial();
-   
-    psMat.color = new THREE.Color(0x55ff55);
-    psMat.transparent = true;
-   psMat.size = 1;
-    psMat.blending = THREE.AdditiveBlending;
+
+
+
+    geometry.vertices.push(v);
+
+    // use a material for some styling
+    {
+
+      var psMat = new THREE.PointCloudMaterial();
+      psMat.map = THREE.ImageUtils.loadTexture("/assets/textures/ps_ball.png");
+      psMat.color = new THREE.Color(0x55ff55);
+      psMat.transparent = true;
+      psMat.size = 3;
+      psMat.blending = THREE.AdditiveBlending;
+    }
 
     // Create a new particle system based on the provided geometry
-    ps = new THREE.PointCloud(geometry, psMat);
-    ps.sizeAttenuation = true;
-    ps.sortParticles = true;
+    {
+      ps = new THREE.PointCloud(geometry, psMat);
+      ps.sizeAttenuation = true;
+      ps.sortParticles = true;
+      ps.position.y = 100 / cam;
+      ps.position.x = 100 / cam;
+      ps.position.z = 100 / cam;
+    }
 
-    ps.position.y = 100 / cam;
-    ps.position.x = 100 / cam;
-    ps.position.z = 100 / cam;
     // add the particle system to the scene
     scene.add(ps);
-
   }
 
-
-  var step = 0;
-
+  // render
   function render() {
     renderer.render(scene, camera);
     requestAnimationFrame(render);
 
-    var r,
-      mult;
     var geometry = ps.geometry;
-    var temp = ps.geometry;
-    for (var i = 0; i < geometry.vertices.length; i++) {
 
+    for (var i = 0; i < geometry.vertices.length; i++) {
+      p1 = geometry.vertices[i];
       for (var j = 0; j < geometry.vertices.length; j++) {
         if (i != j) {
-          var particle = geometry.vertices[i];
-          var cntr = geometry.vertices[j];
+          p0 = geometry.vertices[j];
+          r = Math.pow(p1.length(p0), 3);
 
-          r = particle.length(cntr);
+          acc0XOld = p0.acc.x;
+          acc0YOld = p0.acc.y;
 
-          mult = (-1) * G * (cntr.mass * particle.mass) / Math.pow(r, 3);
+          p0.acc.x = G * p1.mass * ((p1.x - p0.x) / r);
+          p0.acc.y = G * p1.mass * ((p1.y - p0.y) / r);
 
-          particle.acc.x = mult * particle.x;
-          particle.vel.x += particle.acc.x * dt;
-          particle.x += particle.vel.x * dt;
+          p0.vel.x = p0.vel.x + (1 / 2) * (acc0XOld + p0.acc.x) * dt;
+          p0.vel.y = p0.vel.y + (1 / 2) * (acc0YOld + p0.acc.y) * dt;
 
-          particle.acc.y = mult * particle.y;
-          particle.vel.y += particle.acc.y * dt;
-          particle.y += particle.vel.y * dt;
 
-          particle.acc.z = mult * particle.z;
-          particle.vel.z += particle.acc.z * dt;
-          particle.z += particle.vel.z * dt;
+          p0.x = p0.x + p0.vel.x * dt + (1 / 2) * p0.acc.x * Math.pow(dt, 2);
+          p0.y = p0.y + p0.vel.y * dt + (1 / 2) * p0.acc.y * Math.pow(dt, 2);
         }
       }
     }
+
 
     geometry.verticesNeedUpdate = true;
     geometry.colorsNeedUpdate = true;
@@ -147,11 +160,7 @@
   // calls the init function when the window is done loading.
   window.onload = init;
 
-  function mrand() {
-    return Math.random();
-  }
-
-  function intRand(min, max) {
+  function Rand(min, max) {
     return Math.random() * (max - min) + min;
   }
 
