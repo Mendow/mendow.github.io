@@ -95,13 +95,12 @@
 
     geometry.vertices.push(v);
 
-    // use a material for some styling
     {
-
-      psMat.map = THREE.ImageUtils.loadTexture("http://mendow.github.io/projects/n-body/assets/textures/ps_smoke.png");
+      var psMat = new THREE.PointCloudMaterial();
+      psMat.map = THREE.ImageUtils.loadTexture("/assets/textures/ps_ball.png");
       psMat.color = new THREE.Color(0x55ff55);
       psMat.transparent = true;
-      psMat.size = 1;
+      psMat.size = 3;
       psMat.blending = THREE.AdditiveBlending;
     }
 
