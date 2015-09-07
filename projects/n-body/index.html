@@ -25,8 +25,8 @@
     var ps;
 
     var G = 9.81;
-    var dt = 0.001;
-    var count = 10;
+    var dt = 0.1;
+    var count = 100;
 
     var cam = 30;
 
@@ -79,12 +79,12 @@
     var geometry = new THREE.Geometry();
     for (var j = 0; j < y; j++) {
       var v = new THREE.Vector3();
-      var ran = count / 10;
-      var q = 0.000005;
+      var ran = 5;
+      var q = 0.005;
       v.x = Rand(ran, -ran);
       v.y = Rand(ran, -ran);
       v.z = Rand(ran, -ran);
-      v.vel = new THREE.Vector3(Rand(-ran, ran), Rand(-ran, ran), Rand(-ran, ran));
+      v.vel = new THREE.Vector3(Rand(-q, q), Rand(-q, q), Rand(-q, q));
       v.acc = new THREE.Vector3(0, 0, 0);
       v.mass = Rand(0, q);
       geometry.vertices.push(v);
@@ -98,8 +98,6 @@
     // use a material for some styling
     {
 
-      var psMat = new THREE.PointCloudMaterial();
-      
       psMat.map = THREE.ImageUtils.loadTexture("http://mendow.github.io/projects/n-body/assets/textures/ps_smoke.png");
       psMat.color = new THREE.Color(0x55ff55);
       psMat.transparent = true;
@@ -129,24 +127,27 @@
     var geometry = ps.geometry;
 
     for (var i = 0; i < geometry.vertices.length; i++) {
-      p1 = geometry.vertices[i];
+      p0 = geometry.vertices[i];
       for (var j = 0; j < geometry.vertices.length; j++) {
         if (i != j) {
-          p0 = geometry.vertices[j];
-          r = Math.pow(p1.length(p0), 3);
+          p1 = geometry.vertices[j];
+          r = Math.pow(p0.length(p1), 3);
 
           acc0XOld = p0.acc.x;
           acc0YOld = p0.acc.y;
+          acc0ZOld = p0.acc.z;
 
-          p0.acc.x = G * p1.mass * ((p1.x - p0.x) / r);
-          p0.acc.y = G * p1.mass * ((p1.y - p0.y) / r);
+          p0.acc.x = G * p1.mass * p0.mass * ((p1.x - p0.x) / r);
+          p0.acc.y = G * p1.mass * p0.mass * ((p1.y - p0.y) / r);
+          p0.acc.z = G * p1.mass * p0.mass * ((p1.z - p0.z) / r);
 
           p0.vel.x = p0.vel.x + (1 / 2) * (acc0XOld + p0.acc.x) * dt;
           p0.vel.y = p0.vel.y + (1 / 2) * (acc0YOld + p0.acc.y) * dt;
-
+          p0.vel.z = p0.vel.z + (1 / 2) * (acc0ZOld + p0.acc.z) * dt;
 
           p0.x = p0.x + p0.vel.x * dt + (1 / 2) * p0.acc.x * Math.pow(dt, 2);
           p0.y = p0.y + p0.vel.y * dt + (1 / 2) * p0.acc.y * Math.pow(dt, 2);
+          p0.z = p0.z + p0.vel.z * dt + (1 / 2) * p0.acc.z * Math.pow(dt, 2);
         }
       }
     }
