@@ -127,27 +127,31 @@
 
     for (var i = 0; i < geometry.vertices.length; i++) {
       p0 = geometry.vertices[i];
+      p0.acc.x = 0;
+      p0.acc.y = 0;
+      p0.acc.z = 0;
+
+      p0.x = p0.x + p0.vel.x * dt + (1 / 2) * p0.acc.x * Math.pow(dt, 2);
+      p0.y = p0.y + p0.vel.y * dt + (1 / 2) * p0.acc.y * Math.pow(dt, 2);
+      p0.z = p0.z + p0.vel.z * dt + (1 / 2) * p0.acc.z * Math.pow(dt, 2);
+
+      acc0XOld = p0.acc.x;
+      acc0YOld = p0.acc.y;
+      acc0ZOld = p0.acc.z;
+
       for (var j = 0; j < geometry.vertices.length; j++) {
         if (i != j) {
           p1 = geometry.vertices[j];
-          r = Math.pow(p0.length(p1), 3);
+          r = Math.pow(p1.length(p0), 3);
 
-          acc0XOld = p0.acc.x;
-          acc0YOld = p0.acc.y;
-          acc0ZOld = p0.acc.z;
+          p0.acc.x += G * p1.mass * ((p1.x - p0.x) / r);
+          p0.acc.y += G * p1.mass * ((p1.y - p0.y) / r);
+          p0.acc.z += G * p1.mass * ((p1.z - p0.z) / r);
 
-          p0.acc.x = G * p1.mass * p0.mass * ((p1.x - p0.x) / r);
-          p0.acc.y = G * p1.mass * p0.mass * ((p1.y - p0.y) / r);
-          p0.acc.z = G * p1.mass * p0.mass * ((p1.z - p0.z) / r);
-
-          p0.vel.x = p0.vel.x + (1 / 2) * (acc0XOld + p0.acc.x) * dt;
-          p0.vel.y = p0.vel.y + (1 / 2) * (acc0YOld + p0.acc.y) * dt;
-          p0.vel.z = p0.vel.z + (1 / 2) * (acc0ZOld + p0.acc.z) * dt;
-
-          p0.x = p0.x + p0.vel.x * dt + (1 / 2) * p0.acc.x * Math.pow(dt, 2);
-          p0.y = p0.y + p0.vel.y * dt + (1 / 2) * p0.acc.y * Math.pow(dt, 2);
-          p0.z = p0.z + p0.vel.z * dt + (1 / 2) * p0.acc.z * Math.pow(dt, 2);
         }
+        p0.vel.x = p0.vel.x + (1 / 2) * (acc0XOld + p0.acc.x) * dt;
+        p0.vel.y = p0.vel.y + (1 / 2) * (acc0YOld + p0.acc.y) * dt;
+        p0.vel.z = p0.vel.z + (1 / 2) * (acc0ZOld + p0.acc.z) * dt;
       }
     }
 
