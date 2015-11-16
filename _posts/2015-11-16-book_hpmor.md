@@ -12,4 +12,4 @@ Harry Potter and mehod of rationality, thank you Eliezer Yudkowsky
 
 Get more rationality in your life
 
-![1]({{site.baseurl}}/_posts/giphy.gif)
+
