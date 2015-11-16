@@ -3,7 +3,6 @@ published: true
 title: BOOK
 ---
 
-## BOOK(HPMOR)
 
 I (and you should) Read [HPMOR](http://hpmor.com/ )
 
