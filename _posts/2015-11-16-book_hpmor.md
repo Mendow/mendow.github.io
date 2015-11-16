@@ -4,7 +4,7 @@ published: true
 
 ## BOOK(HPMOR)
 
-I (and you should) Read [HPMOR](http://hpmor.com/ "hpmor")
+I (and you should) Read [HPMOR](http://hpmor.com/ )
 
 Harry Potter and mehod of rationality, thank you Eliezer Yudkowsky
 
